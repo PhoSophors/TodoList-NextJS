@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import UpdateTodoForm from './UpdateTodoForm';
 import { TodoService } from '../services/TodoService';
+import { Card, Button, Dropdown, Menu, notification } from 'antd';
+import { 
+  EditOutlined, 
+  DeleteOutlined, 
+  EllipsisOutlined, 
+  CloseOutlined, 
+  CheckOutlined  
+} from '@ant-design/icons';
 
 interface Todo {
   id: string;
@@ -18,6 +26,7 @@ interface TodoItemProps {
 
 const TodoItem: React.FC<TodoItemProps> = ({ todo, updateTodo, deleteTodo }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -48,11 +57,33 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, updateTodo, deleteTodo }) => 
     try {
       const updatedTodo = await TodoService.toggleComplete(todo.id, todo.title, todo.description, todo.completed, todo.createdAt);
       updateTodo(todo.id, updatedTodo);
-      window.location.reload();
+      notification.success({
+        message: 'Success',
+        description: `Todo marked as ${updatedTodo.completed ? 'completed' : 'incomplete'}`,
+      });
     } catch (error) {
-      console.error('Failed to toggle todo completion:', error);
+      notification.error({
+        message: 'Error',
+        description: 'Failed to update todo',
+      });
     }
   };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="mark" onClick={handleToggleComplete} icon={todo.completed ? <CheckOutlined /> : <CloseOutlined/>}>
+        Mark as {todo.completed ? 'Incomplete' : 'Complete'}
+      </Menu.Item>
+      <hr />
+      <Menu.Item key="edit" onClick={handleEdit} icon={<EditOutlined />}>
+        Edit
+      </Menu.Item>
+      <hr />
+      <Menu.Item key="delete" onClick={handleDelete} icon={<DeleteOutlined />}>
+        Delete
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <>
@@ -62,25 +93,38 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, updateTodo, deleteTodo }) => 
         cancelEdit={cancelEdit} 
         visible={isEditing} 
       />
-      <tr>
-        <td className="border border-slate-300">{todo.id}</td>
-        <td className="border border-slate-300" style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-          {todo.title}
-        </td>
-        <td className="border border-slate-300" style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}>
-          {todo.description}
-        </td>
-        <td className="border border-slate-300">
-          <button onClick={handleToggleComplete}>
-            {todo.completed ? 'Incomplete' : 'Complete'}
-          </button>
-        </td>
-        <td className="border border-slate-300">{formatDate(todo.createdAt)}</td>
-        <td className="border border-slate-300 gap-2 mx-2 flex p-5">
-          <button onClick={handleEdit}>Edit</button>
-          <button onClick={handleDelete}>Delete</button>
-        </td>
-      </tr>
+      <div
+        onMouseEnter={() => setShowDropdown(true)}
+        onMouseLeave={() => setShowDropdown(false)}
+      >
+        <Card
+          hoverable
+          style={{ position: 'relative', height: 290 }}
+          className="group"
+        >
+          <Card.Meta
+            title={<div className="line-clamp-2">{todo.title}</div>}
+            description={<div className="line-clamp-6">{todo.description}</div>}
+            style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
+          />
+          <div className="absolute bottom-5 left-5 flex justify-center items-center">
+            <p>{formatDate(todo.createdAt)}</p>
+          </div>
+          {showDropdown && (
+            <Dropdown 
+              overlay={menu} 
+              trigger={['hover']} 
+              placement="bottomRight"
+              overlayStyle={{ width: 200 }}
+            >
+              <Button
+                className="absolute bottom-5 right-5 bg"
+                icon={<EllipsisOutlined />}
+              />
+            </Dropdown>
+          )}
+        </Card>
+      </div>
     </>
   );
 };

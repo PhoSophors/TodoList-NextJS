@@ -41,17 +41,16 @@ const Home = () => {
     );
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className='flex justify-center items-center'>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className='flex justify-center items-center flex-col bg-slate-100 h-screen'>
-      <h1>Todo List</h1>
-      <div>
+    <div className='flex justify-center items-center flex-col'>
+      <div className='mt-20 flex'>
         <CreateTodoForm setTodos={setTodos} />
       </div>
      
-      <div className='max-w-screen-2xl'>
+      <div className=''>
         <TodoList todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo} />
       </div>
     
