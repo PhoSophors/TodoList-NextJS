@@ -18,7 +18,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos = [], updateTodo, deleteTodo 
   );
 
   return (
-    <>
+    <div className='text-center'>
       <div className='flex justify-center p-2'>
         <Input
           type="text"
@@ -40,7 +40,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos = [], updateTodo, deleteTodo 
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
