@@ -18,8 +18,8 @@ const TodoList: React.FC<TodoListProps> = ({ todos = [], updateTodo, deleteTodo 
   );
 
   return (
-    <div className='text-center'>
-      <div className='flex justify-center p-2'>
+    <>
+      <div className='flex justify-center p-2 mx-5'>
         <Input
           type="text"
           placeholder="Search todo by title..."
@@ -34,13 +34,13 @@ const TodoList: React.FC<TodoListProps> = ({ todos = [], updateTodo, deleteTodo 
           No result. Create a new one instead!
         </div>
       ) : (
-        <div className='flex grid xl:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-3 xl:p-5 md:p-5 p-2'>
+        <div className='flex grid mt-5 xl:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-3 xl:p-5 md:p-5 p-2'>
           {filteredTodos.map(todo => ( 
             <TodoItem key={todo.id} todo={todo} updateTodo={updateTodo} deleteTodo={deleteTodo} />
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

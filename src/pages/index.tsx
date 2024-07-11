@@ -46,7 +46,7 @@ const Home = () => {
 
   return (
     <div className='flex justify-center items-center flex-col'>
-      <div className='mt-20 flex'>
+      <div className='xl:mt-20 md:mt-10 mt-5 flex'>
         <CreateTodoForm setTodos={setTodos} />
       </div>
      
