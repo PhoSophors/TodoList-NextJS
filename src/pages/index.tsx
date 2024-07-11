@@ -41,7 +41,7 @@ const Home = () => {
     );
   };
 
-  if (isLoading) return <div className='flex justify-center items-center'>Loading...</div>;
+  if (isLoading) return <div className='flex justify-center items-center h-screen'>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (

@@ -3,6 +3,9 @@ import { Todo } from '../pages/api/types';
 
 // The TodoService class provides static methods to interact with the API endpoints for todos.
 export class TodoService {
+  static updateTodo(id: string, todoTitle: string, todoDescription: string) {
+    throw new Error('Method not implemented.');
+  }
 
   static async fetchTodos(): Promise<Todo[]> {
     try {
@@ -18,7 +21,7 @@ export class TodoService {
     }
   }
 
-  // The addTodo method sends a POST request to the /api/todos endpoint with the todo text in the request body.
+  // The addTodo method sends a POST request to the /api/todo endpoint with the todo text in the request body.
   static async addTodo(title: string, description: string): Promise<Todo> {
     try {
       const response = await fetch('/api/todo', {
@@ -39,7 +42,7 @@ export class TodoService {
     }
   }
 
-  // The updateTodo method sends a PUT request to the /api/todos endpoint with the todo ID, text, and completed status in the request body.
+  // The updateTodo method sends a PUT request to the /api/todo endpoint with the todo ID, text, and completed status in the request body.
   static async updateTodoService(id: string, title: string, description: string, completed: boolean) {
     try {
       const response = await fetch('/api/todo', {
@@ -58,7 +61,7 @@ export class TodoService {
     }
   }
 
-  // The deleteTodo method sends a DELETE request to the /api/todos endpoint with the todo ID in the request body.
+  // The deleteTodo method sends a DELETE request to the /api/todo endpoint with the todo ID in the request body.
   static async deleteTodo(id: string) {
     try {
       const response = await fetch('/api/todo', {
@@ -76,7 +79,7 @@ export class TodoService {
     }
   }
 
-  // The toggleComplete method sends a PUT request to the /api/todos endpoint with the todo ID, text, and the opposite of the current completed status in the request body.
+  // The toggleComplete method sends a PUT request to the /api/todo endpoint with the todo ID, text, and the opposite of the current completed status in the request body.
   static async toggleComplete(id: string, title: string, description: string, completed: boolean, createdAt: string): Promise<Todo> {
     try {
       const response = await fetch('/api/todo', {

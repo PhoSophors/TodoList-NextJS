@@ -11,6 +11,7 @@ type Data = Todo | Todo[] | { error: string };
 const getTodos = async (): Promise<Todo[]> => {
   const todosCollection = collection(db, 'todos');
   const querySnapshot = await getDocs(todosCollection);
+
   return querySnapshot.docs.map(doc => ({
     id: doc.id,
     ...doc.data(),
@@ -31,6 +32,7 @@ const addTodo = async (title: string, description: string): Promise<Todo> => {
   }
 
   const createdAt = new Date().toISOString();
+
   const newTodo = { title, description, completed: false, createdAt };
   const docRef = await addDoc(todosCollection, newTodo);
   return { id: docRef.id, ...newTodo };
@@ -40,6 +42,7 @@ const addTodo = async (title: string, description: string): Promise<Todo> => {
 const updateTodo = async (id: string, title: string, description: string, completed: boolean): Promise<Todo> => {
   const todoDoc = doc(db, 'todos', id);
   await updateDoc(todoDoc, { title, description, completed });
+
   return { id, title, description, completed, createdAt: '' };
 };
 
@@ -47,17 +50,20 @@ const updateTodo = async (id: string, title: string, description: string, comple
 const deleteTodo = async (id: string): Promise<Todo> => {
   const todoDoc = doc(db, 'todos', id);
   await deleteDoc(todoDoc);
+  
   return { id, title: '', description: '', completed: false, createdAt: '' };
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   try {
     switch (req.method) {
+      /** Get all todo */
       case 'GET':
         const todos = await getTodos();
         res.status(200).json(todos);
         break;
 
+      /** Add or create todo */
       case 'POST':
         const { title, description } = req.body;
         if (!title) {
@@ -68,6 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         res.status(201).json(newTodo);
         break;
 
+      /** Update todo */
       case 'PUT':
         const { id, title: putTitle, description: putDescription, completed } = req.body;
         if (!id || putTitle === undefined || completed === undefined) {
@@ -78,6 +85,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         res.status(200).json(updatedTodo);
         break;
 
+      /** Delete todo */
       case 'DELETE':
         const { id: deleteId } = req.body;
         if (!deleteId) {
@@ -88,6 +96,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
         res.status(200).json(deletedTodo);
         break;
 
+      /** Handle other HTTP methods */
       default:
         res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
         res.status(405).end(`Method ${req.method} Not Allowed`);
