@@ -1,8 +1,8 @@
 // pages/api/todos.ts
 
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { db } from '../../firebase/firebaseConfig';
-import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, where, query } from 'firebase/firestore';
+import { db } from '../../database/firebaseConfig';
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc, where, query, documentId } from 'firebase/firestore';
 import { Todo } from './types';
 
 type Data = Todo | Todo[] | { error: string };
@@ -40,6 +40,17 @@ const addTodo = async (title: string, description: string): Promise<Todo> => {
 
 // Update a todo in Firestore
 const updateTodo = async (id: string, title: string, description: string, completed: boolean): Promise<Todo> => {
+  const todosCollection = collection(db, 'todos');
+  
+  // Query for todos with the same title
+  const q = query(todosCollection, where("title", "==", title), where(documentId(), "!=", id));
+  const querySnapshot = await getDocs(q);
+  
+  // Check if any todos exist with the same title
+  if (!querySnapshot.empty) {
+    throw new Error("A todo with the same title already exists.");
+  }
+
   const todoDoc = doc(db, 'todos', id);
   await updateDoc(todoDoc, { title, description, completed });
 

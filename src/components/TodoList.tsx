@@ -31,7 +31,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos = [], updateTodo, deleteTodo 
 
       {filteredTodos.length === 0 ? (
         <div className="flex justify-center text-gray-500 p-4">
-          No result. Create a new one instead!
+          No result of <span className='font-semibold ml-2'>{searchTerm}</span> . Create a new one instead!
         </div>
       ) : (
         <div className='flex grid mt-5 xl:grid-cols-5 md:grid-cols-3 grid-cols-2 gap-3 xl:p-5 md:p-5 p-2'>

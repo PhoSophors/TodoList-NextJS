@@ -55,7 +55,20 @@ const TodoItem: React.FC<TodoItemProps> = ({ todo, updateTodo, deleteTodo }) => 
   
   // Handle delete todo
   const handleDelete = () => {
-    deleteTodo(todo.id); // Call the deleteTodo function from the parent component
+    try {
+      deleteTodo(todo.id); 
+  
+      notification.success({
+        message: 'Success',
+        description: 'Todo deleted successfully',
+      });
+    } catch (error) {
+      console.error('Failed to delete todo:', error);
+      notification.error({
+        message: 'Error',
+        description: 'Failed to delete todo. Please try again later.',
+      });
+    }
   };
 
   const handleEdit = () => {

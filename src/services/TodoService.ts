@@ -31,16 +31,24 @@ export class TodoService {
         },
         body: JSON.stringify({ title, description }),
       });
+  
       if (!response.ok) {
-        throw new Error('Failed to add todo');
+        // Check specific HTTP status codes
+        if (response.status === 409) {
+          throw new Error('Todo with this title already exists');
+        } else {
+          throw new Error('Failed to add todo');
+        }
       }
+  
       const newTodo = await response.json();
       return newTodo as Todo;
     } catch (error) {
       console.error('Error adding todo:', error);
-      throw error;
+      throw error; // Rethrow the error for the caller to handle
     }
   }
+  
 
   // The updateTodo method sends a PUT request to the /api/todo endpoint with the todo ID, text, and completed status in the request body.
   static async updateTodoService(id: string, title: string, description: string, completed: boolean) {
