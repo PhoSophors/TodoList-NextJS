@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Input } from 'antd';
+import { Modal, Form, Input, Descriptions } from 'antd';
 import { Todo } from '../pages/api/types'; 
 
 interface TodoModalProps {
@@ -52,6 +52,7 @@ const TodoModal: React.FC<TodoModalProps> = ({ visible, onCancel, onCreate, onUp
       visible={visible}
       onCancel={onCancel}
       onOk={handleFormSubmit}
+      centered
     >
       <Form form={form} layout="vertical">
         <Form.Item
@@ -69,8 +70,9 @@ const TodoModal: React.FC<TodoModalProps> = ({ visible, onCancel, onCreate, onUp
           initialValue={todo ? todo.description : ''}
           rules={[{ required: true, message: 'Please enter a description for the todo' }]}
         >
-          <Input.TextArea placeholder="Enter todo description" rows={4} />
+          <Input.TextArea placeholder="Enter todo description" rows={8} />
         </Form.Item>
+
       </Form>
     </Modal>
   );

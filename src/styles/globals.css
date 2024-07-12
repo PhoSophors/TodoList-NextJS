@@ -5,6 +5,7 @@
 :root { 
   --bg-slate-100: #f8f9fa;
 }
+
 body {
   background-color: var(--bg-slate-100);
 }

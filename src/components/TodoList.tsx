@@ -19,7 +19,7 @@ const TodoList: React.FC<TodoListProps> = ({ todos = [], updateTodo, deleteTodo 
 
   return (
     <>
-      <div className='flex justify-center p-2 mx-5'>
+      <div className='flex justify-center p-2 mx-5 mt-5'>
         <Input
           type="text"
           placeholder="Search todo by title..."
